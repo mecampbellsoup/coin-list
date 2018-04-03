@@ -21,12 +21,14 @@ def isPresent(root, val)
   if root.value == val
     return 1
   elsif root.value && val > root.value # we need to traverse to the right
-    isPresent(root.right, val)
+    found = isPresent(root.right, val)
+    found = 0 unless found == 1
+    found
   elsif root.value && val < root.value # we need to traverse to the left
-    isPresent(root.left, val)
+    found = isPresent(root.left, val)
+    found = 0 unless found == 1
+    found
   end
-
-  0
 end
 
 require 'rspec/autorun'
@@ -51,13 +53,17 @@ RSpec.describe BSTreeNode do
       root = BSTreeNode.new(2)
       expect(isPresent(root, 2)).to eq 1
 
+      # Setup the tree
       node = BSTreeNode.new(11)
       elements = [ 20, 10, 30, 8, 12, 25, 40, 6, 11, 13, 23, 4, 30, 10, 12, 15 ]
+
       for elem in elements
         _insert_node_into_binarysearchtree(node, elem)
       end
+
+      # Make assertions about a present and non-present element
       expect(isPresent(node, 20)).to eq 1
-      expect(isPresent(node, 2)).to eq 0
+      expect(isPresent(node, 2)).to  eq 0
     end
   end
 end
